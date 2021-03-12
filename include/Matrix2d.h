@@ -47,21 +47,17 @@ template <class T> class Matrix2d
         Matrix2d<T> operator*(const Matrix2d<T> &other);
         Matrix2d<T> operator/(const Matrix2d<T> &other);
 
+        // 矩阵赋值，e.g. matrix_obj << 1, 2, 3, 4, 5, 6;
+        Matrix2d<T> &operator<<(const T &n);
+        Matrix2d<T> &operator,(const T &n);
     public:
         int shape[2];
         void print_matrix();
         template <class A> friend std::ostream &operator<<(std::ostream &output, const Matrix2d<A> &m);
         template <class A> friend std::istream &operator>>(std::istream &input, const Matrix2d<A> &m);
 
-        // 矩阵赋值，e.g. matrix_obj << 1, 2, 3, 4, 5, 6;
-        Matrix2d<T> &operator<<(const T &n);
-        Matrix2d<T> &operator,(const T &n);
-/*
-        template <class A> friend Matrix2d<A> operator,(const Matrix2d<A> &m, const A &n) {
-            std::cout<<","<<n<<std::endl;
-            return const_cast< Matrix2d<A>&>(m);
-        }
-*/
+
+        Matrix2d<T> reshape(int row, int col);
         Matrix2d<T> Tr(); // transpose
     private:
         std::vector<std::vector<T>> mat;
@@ -289,7 +285,19 @@ template<class T> Matrix2d<T> Matrix2d<T>::Tr() {
 }
 
 // reshape
-
+template<class T> Matrix2d<T> Matrix2d<T>::reshape(int row, int col) {
+    Matrix2d<T> ans(row, col, 0);
+    assert(row*col == shape[0]*shape[1]);
+    int ans_ptr = 0;
+    for(auto i=mat.begin(); i != mat.end(); ++i) {
+        for(auto j = i->begin(); j != i->end(); ++j, ++ans_ptr) {
+            int r = ans_ptr / col;
+            int c = ans_ptr % col;
+            ans[r][c] = *j;
+        }
+    }
+    return ans;
+}
 
 
 #endif // MATRIX2D_H
