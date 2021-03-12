@@ -6,6 +6,7 @@
 #include<cmath>
 #include<assert.h>
 #include<ostream>
+#include<istream>
 
 template <class T> class Matrix2d
 {
@@ -50,10 +51,21 @@ template <class T> class Matrix2d
         int shape[2];
         void print_matrix();
         template <class A> friend std::ostream &operator<<(std::ostream &output, const Matrix2d<A> &m);
+        template <class A> friend std::istream &operator>>(std::istream &input, const Matrix2d<A> &m);
 
+        // 矩阵赋值，e.g. matrix_obj << 1, 2, 3, 4, 5, 6;
+        Matrix2d<T> &operator<<(const T &n);
+        Matrix2d<T> &operator,(const T &n);
+/*
+        template <class A> friend Matrix2d<A> operator,(const Matrix2d<A> &m, const A &n) {
+            std::cout<<","<<n<<std::endl;
+            return const_cast< Matrix2d<A>&>(m);
+        }
+*/
+        Matrix2d<T> Tr(); // transpose
     private:
         std::vector<std::vector<T>> mat;
-
+        int input_ptr = 0;
     private:
         void __fill(int r, int c, T val);
 };
@@ -87,6 +99,22 @@ template <class T> Matrix2d<T>::Matrix2d(std::vector<std::vector<T>> m) {
     shape[1] = this->mat[0].size();
 }
 
+/* Matrix assignment  */
+template <class T> Matrix2d<T> &Matrix2d<T>::operator<<(const T &n) {
+    mat[0][0] = n;
+    input_ptr = 1;
+    return *this;
+}
+
+template <class T> Matrix2d<T> &Matrix2d<T>::operator,(const T &n) {
+     assert(input_ptr < shape[1]*shape[0]);
+     int r = input_ptr / shape[1];
+     int c = input_ptr % shape[1];
+     mat[r][c] = n;
+     input_ptr += 1;
+     return *this;
+}
+
 /********* Display matrix **********/
 template<class A> std::ostream &operator<<(std::ostream &output, const Matrix2d<A> &m) {
     output <<std::endl << "[";
@@ -104,6 +132,16 @@ template<class A> std::ostream &operator<<(std::ostream &output, const Matrix2d<
     return output;
 }
 
+template <class A> std::istream &operator>>(std::istream &input, const Matrix2d<A> &m) {
+
+    for(int i=0; i<m.shape[0]; ++i) {
+        for(int j=0; j<m.shape[1]; ++j) {
+            input >> (A)m.mat[i][j];
+        }
+
+    }
+    return input;
+}
 /********* Basic matrix operations **********/
 /*  重载运算符  */
 template<class T> std::vector<T> &Matrix2d<T>::operator[](int i) {
@@ -238,6 +276,20 @@ template<class T> Matrix2d<T> Matrix2d<T>::operator/(T n) {
     return binary_operation(n,
                 [](T a, T b) -> T {return a/b;});  // lambda expression
 }
+
+// transpose
+template<class T> Matrix2d<T> Matrix2d<T>::Tr() {
+    Matrix2d<T> ans(shape[1], shape[0], 0);
+    for(int i=0; i<shape[0]; ++i) {
+        for(int j=0; j<shape[1]; ++j) {
+            ans[j][i] = mat[i][j];
+        }
+    }
+    return ans;
+}
+
+// reshape
+
 
 
 #endif // MATRIX2D_H

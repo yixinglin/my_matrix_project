@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1615579025 source:d:\workspace\cpp\matrix_project\main.cpp
+1615591509 source:d:\workspace\cpp\matrix_project\main.cpp
 	<iostream>
 	<ostream>
 	"Matrix2d.h"
@@ -8,12 +8,13 @@
 1615443552 source:d:\workspace\cpp\matrix_project\src\matrix2d.cpp
 	"Matrix2d.h"
 
-1615579025 d:\workspace\cpp\matrix_project\include\matrix2d.h
+1615591354 d:\workspace\cpp\matrix_project\include\matrix2d.h
 	<iostream>
 	<vector>
 	<cmath>
 	<assert.h>
 	<ostream>
+	<istream>
 
 1615501644 source:d:\workspace\cpp\matrix_project\src\matmath.cpp
 	"matmath.h"
