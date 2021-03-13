@@ -8,6 +8,8 @@
 #include<ostream>
 #include<istream>
 
+#define assertm(exp, msg) assert(((void)msg, exp))
+
 template <class T> class Matrix2d
 {
     public:
@@ -59,6 +61,7 @@ template <class T> class Matrix2d
 
         Matrix2d<T> reshape(int row, int col);
         Matrix2d<T> Tr(); // transpose
+        Matrix2d<T> block(int i, int j, int p, int q); // block operation. Block of size (p,q), starting at (i,j)
     private:
         std::vector<std::vector<T>> mat;
         int input_ptr = 0;
@@ -208,8 +211,10 @@ template<class T> Matrix2d<T> &Matrix2d<T>::operator/=(const Matrix2d<T> &other)
 
 /* 双元运算符 */
 template<class T> Matrix2d<T> Matrix2d<T>::binary_operation(const Matrix2d<T> &other, T (*func)(T, T)) {
-    assert (other.shape[0] == this->shape[0]);
-    assert (other.shape[1] == this->shape[1]);
+    assertm (other.shape[0] == this->shape[0],
+             "Shapes should be the same");
+    assertm (other.shape[1] == this->shape[1],
+             "Shapes should be the same");
 
     Matrix2d<T> ans(other);
     auto i = this->mat.begin();  //利用迭代器提高效率
@@ -299,6 +304,25 @@ template<class T> Matrix2d<T> Matrix2d<T>::reshape(int row, int col) {
     return ans;
 }
 
+// block operation,
+// Block of size (p,q), starting at (i,j)
+template<class T> Matrix2d<T> Matrix2d<T>::block(int i, int j, int p, int q) {
+    assertm(i >= 0 && i+p <= shape[0],
+            "i exceeded scope");
+    assertm(j >= 0 && j+q <= shape[1],
+            "j exceeded scope");
+    Matrix2d<T> ans(p, q, 0);
+    int ans_ptr = 0;
+    for(int ii = i; ii<i+p; ++ii) {
+        for(int jj = j; jj<j+q; ++jj, ++ans_ptr) {
+            int r = ans_ptr / q;
+            int c = ans_ptr % q;
+            ans[r][c] = mat[ii][jj];
+        }
+
+    }
+    return ans;
+}
 
 #endif // MATRIX2D_H
 

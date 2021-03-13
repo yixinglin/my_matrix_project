@@ -12,6 +12,7 @@ int main()
             4, 5, 6,
             4, 5, 6;
     cout << mat0.reshape(2,6).Tr();
+    cout << mat0.block(1,0,3,3);
 
     Matrix2d<float> mat1(4, 3, 5.6);
     Matrix2d<float> mat2(4, 3, 7.77777), mat3;
