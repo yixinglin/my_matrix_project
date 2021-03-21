@@ -2,15 +2,22 @@
 #include <ostream>
 #include"Matrix2d.h"
 #include"matmath.h"
+#include"linalg.h"
 using namespace std;
 
 int main()
 {
-    Matrix2d<float> mat0(4, 3, 1);
-    mat0 << 2, 2, 3,
-            4, 5, 6,
-            4, 5, 6,
-            4, 5, 6;
+    Matrix2d<float> mat0(4, 4, 1);
+    mat0 << 0, 2, 3, 7,
+            0, 5, 6, 2,
+            0, 5, 6, 1,
+            0, 5, 0, 2;
+    Matrix2d<float> mat00 = mat0.Tr();
+    //double q = mat_triu(mat0);
+    cout<<det(mat0);
+    cout<<mat0;
+
+/*
     cout << mat0.reshape(2,6).Tr();
     cout << mat0.block(1,0,3,3);
 
@@ -24,6 +31,6 @@ int main()
 
     mat3 = abs(mat2);
     cout <<mat3;
-    cout<<rand();
+*/
     return 0;
 }

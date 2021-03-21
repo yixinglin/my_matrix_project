@@ -22,7 +22,7 @@ template <class T> class Matrix2d
 
     public:
         /*  运算符重载  */
-        std::vector<T> &operator[](int i);
+        std::vector<T> &operator[] (int i) {return mat[i];};
         /* 一元运算符 */
         void unary_operaton(T (*func)(T));
         Matrix2d<T> &operator++(int n);
@@ -62,6 +62,12 @@ template <class T> class Matrix2d
         Matrix2d<T> reshape(int row, int col);
         Matrix2d<T> Tr(); // transpose
         Matrix2d<T> block(int i, int j, int p, int q); // block operation. Block of size (p,q), starting at (i,j)
+
+        T at(int i, int j) const {
+            return mat[i][j];
+        }
+
+
     private:
         std::vector<std::vector<T>> mat;
         int input_ptr = 0;
@@ -143,10 +149,11 @@ template <class A> std::istream &operator>>(std::istream &input, const Matrix2d<
 }
 /********* Basic matrix operations **********/
 /*  重载运算符  */
-template<class T> std::vector<T> &Matrix2d<T>::operator[](int i) {
+/*
+template<class T> std::vector<T> &Matrix2d<T>::operator[] (int i){
     return mat[i];
 }
-
+*/
 /* 重载一元运算符 */
 template<class T> void Matrix2d<T>::unary_operaton(T (*func)(T)) {
     //typename std::vector<std::vector<T>>::iterator i;  //利用迭代器提高效率
@@ -323,6 +330,25 @@ template<class T> Matrix2d<T> Matrix2d<T>::block(int i, int j, int p, int q) {
     }
     return ans;
 }
+
+
+/*
+template<class T>
+Matrix2d<T> matmul(const Matrix2d<T> &m1,  const Matrix2d<T> &m2) {
+    assertm(m1.shape[1] == m2.shape[0], "Matrix Shape: matmul");
+
+    Matrix2d<T> ans(m1.shape[0], m2.shape[1], 0);
+    for(int i=0; i<m1.shape[0]; ++i) {
+        for(int j=0; j<m2.shape[1]; ++j){
+            for(int k=0; k<m2.shape[0]; ++k) {
+                ans[i][j] += (m1[i][k] * m2[k][j]);
+
+            }
+        }
+    }
+    return ans;
+}
+*/
 
 #endif // MATRIX2D_H
 
