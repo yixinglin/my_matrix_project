@@ -62,11 +62,12 @@ template <class T> class Matrix2d
         Matrix2d<T> reshape(int row, int col);
         Matrix2d<T> Tr(); // transpose
         Matrix2d<T> block(int i, int j, int p, int q); // block operation. Block of size (p,q), starting at (i,j)
+        T at(int i, int j) const {return mat[i][j];}
 
-        T at(int i, int j) const {
-            return mat[i][j];
-        }
-
+    public:
+        static Matrix2d<T> eye(int i);
+        static Matrix2d<T> hstack(Matrix2d<T> &m, Matrix2d<T> &n);
+        static Matrix2d<T> vstack(Matrix2d<T> &m, Matrix2d<T> &n);
 
     private:
         std::vector<std::vector<T>> mat;
@@ -331,6 +332,45 @@ template<class T> Matrix2d<T> Matrix2d<T>::block(int i, int j, int p, int q) {
     return ans;
 }
 
+template<class T>  Matrix2d<T> Matrix2d<T>::eye(int i) {
+    Matrix2d<T> ans(i, i, 0);
+    while(i--) {
+        ans[i][i] = 1;
+    }
+    return ans;
+}
+
+template<class T>  Matrix2d<T> Matrix2d<T>::hstack(Matrix2d<T> &m, Matrix2d<T> &n) {
+    assertm(m.shape[0] == n.shape[0], "hstack");
+    Matrix2d<T> ans(m.shape[0], m.shape[1] + n.shape[1], 0);
+    for(int i=0; i<ans.shape[0]; ++i) {
+        for(int j=0; j<m.shape[1]; ++j) {
+            ans[i][j] = m[i][j];
+        }
+
+        for(int j=0; j<n.shape[1]; ++j) {
+            ans[i][j+m.shape[1]] = n[i][j];
+        }
+
+    }
+    return ans;
+}
+
+template<class T>  Matrix2d<T> Matrix2d<T>::vstack(Matrix2d<T> &m, Matrix2d<T> &n) {
+    assertm(m.shape[1] == n.shape[1], "vstack");
+    Matrix2d<T> ans(m.shape[0] + n.shape[0], m.shape[1], 0);
+    for(int i=0; i<ans.shape[1]; ++i) {
+        for(int j=0; j<m.shape[0]; ++j) {
+            ans[j][i] = m[j][i];
+        }
+
+        for(int j=0; j<n.shape[0]; ++j) {
+            ans[j+m.shape[0]][i] = n[j][i];
+        }
+
+    }
+    return ans;
+}
 
 /*
 template<class T>

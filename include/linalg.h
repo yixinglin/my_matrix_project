@@ -3,7 +3,6 @@
 
 #include "Matrix2d.h"
 /********* 矩阵操作 **********/
-
 template<class T> Matrix2d<T> matmul(Matrix2d<T> &m1,  Matrix2d<T> &m2) {
     assertm(m1.shape[1] == m2.shape[0], "Matrix Shape: matmul");
     Matrix2d<T> ans(m1.shape[0], m2.shape[1], 0);

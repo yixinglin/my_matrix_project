@@ -7,15 +7,16 @@ using namespace std;
 
 int main()
 {
-    Matrix2d<float> mat0(4, 4, 1);
-    mat0 << 0, 2, 3, 7,
-            0, 5, 6, 2,
-            0, 5, 6, 1,
-            0, 5, 0, 2;
-    Matrix2d<float> mat00 = mat0.Tr();
+    Matrix2d<float> mat0(4, 3, 0);
+    mat0 << 0, 2, 3,
+            0, 5, 7,
+            0, 1, 6,
+            0, 5, 0;
+    Matrix2d<float> mat00 = Matrix2d<float>::eye(3);
     //double q = mat_triu(mat0);
-    cout<<det(mat0);
+    //cout<<det(mat0);
     cout<<mat0;
+    cout<<Matrix2d<float>::vstack(mat0, mat00);
 
 /*
     cout << mat0.reshape(2,6).Tr();
